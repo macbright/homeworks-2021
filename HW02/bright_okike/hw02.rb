@@ -1,99 +1,70 @@
 module My_enumerables
-    def my_each
+  def my_each
+    self.length.times do |x|
+      yield(self[x])
+    end
+  end
+
+  def my_map(proc = nil)
+    arr = Array.new
+    if proc 
       self.length.times do |x|
-        yield(self[x])
+        arr.push(proc.call(self[x]))
       end
-    end
-
-    def my_map(proc = nil)
-      arr = Array.new
-      if proc 
-        self.length.times do |x|
-          arr.push(proc.call(self[x]))
-        end
-      else 
-        self.length.times do |x|
-          arr.push(yield(self[x]))
-        end
-      end
-      arr
-    end
-
-    def my_select
-      arr = Array.new
+    else 
       self.length.times do |x|
-        if yield(self[x])
-          arr.push(self[x])
-        end
-      end
-      arr
-    end
-
-    
-
-    def my_all?
-      self.length.times do |x|
-        if !yield(self[x])
-          return false
-        else 
-          return true
-        end
+        arr.push(yield(self[x]))
       end
     end
+    arr
+  end
 
-
-    def my_any?
-      self.length.times do |x|
-        if yield(self[x]) != false
-          return true
-        end
+  def my_select
+    arr = Array.new
+    self.length.times do |x|
+      if yield(self[x])
+        arr.push(self[x])
       end
-      false
     end
+    arr
+  end
 
-
-    def my_none?
-      self.length.times do |x|
-        if yield(self[x]) 
-          return false
-        end
-      end
-      true
+  def my_all?
+    self.length.times do |x|
+        !yield(self[x]) ? false : true
     end
+  end
 
-
-    def my_count arg=nil
-      arr = []
-      if block_given?
-          # i = 0
-          arr = self.my_select {|x| yield x}
-      elsif arg != nil
-          arr = self.my_select {|x| x == arg}
-
-      else 
-          return self.size 
-      end
-      arr.size
+  def my_any?
+    self.length.times do |x|
+      return true if yield(self[x]) != false
     end
+    false
+  end
 
-
-    def my_inject(n = 0)
-       out = n
-      self.my_each do |x|
-        out = yield(out, x)
-      end
-      return out
+  def my_none?
+    self.length.times do |x|
+      return false if yield(self[x]) 
     end
-    
+    true
+  end
+
+  def my_count arg=nil
+    arr = []
+    if block_given?
+        arr = self.my_select {|x| yield x}
+    elsif arg != nil
+        arr = self.my_select {|x| x == arg}
+    else 
+        return self.size 
+    end
+    arr.length
+  end
+
+  def my_inject(args = 0)
+    self.my_each do |el|
+      args = yield(args, el)
+    end
+    args
+  end
 end
-
-arr = [2,3,2,5]
-
-def test1(arr)
-    include My_enumerables
-    arr.my_select() do |x|
-      x 
-    end
-end
-
-print test1(arr)
