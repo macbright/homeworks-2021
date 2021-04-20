@@ -1,7 +1,8 @@
-module My_enumerables
+
+module MyEnumerables
   def my_each
     self.length.times do |x|
-      yield(self[x])
+    yield(self[x])
     end
   end
 
@@ -31,7 +32,7 @@ module My_enumerables
 
   def my_all?
     self.length.times do |x|
-        !yield(self[x]) ? false : true
+      !yield(self[x]) ? false : true
     end
   end
 
@@ -49,14 +50,14 @@ module My_enumerables
     true
   end
 
-  def my_count arg=nil
+  def my_count (arg=nil)
     arr = []
     if block_given?
-        arr = self.my_select {|x| yield x}
+      arr = self.my_select { |x| yield(x) }
     elsif arg != nil
-        arr = self.my_select {|x| x == arg}
+      arr = self.my_select { |x| x == arg }
     else 
-        return self.size 
+      return self.size 
     end
     arr.length
   end

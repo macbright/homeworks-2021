@@ -1,12 +1,5 @@
-require_relative "hw02"
 
+require_relative "my_enumerables"
+include MyEnumerables
 arr = [2,3,2,5]
-
-def test1(arr)
-    include My_enumerables
-    arr.my_select() do |el|
-      el 
-    end
-end
-
-print test1(arr)
+arr.my_each {|element| puts element*2}
