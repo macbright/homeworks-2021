@@ -1,18 +1,18 @@
-
+# my enumerables module
 module MyEnumerables
   def my_each
     self.length.times do |x|
-    yield(self[x])
+      yield(self[x])
     end
   end
 
   def my_map(proc = nil)
-    arr = Array.new
-    if proc 
+    arr = []
+    if proc
       self.length.times do |x|
         arr.push(proc.call(self[x]))
       end
-    else 
+    else
       self.length.times do |x|
         arr.push(yield(self[x]))
       end
@@ -21,7 +21,7 @@ module MyEnumerables
   end
 
   def my_select
-    arr = Array.new
+    arr = []
     self.length.times do |x|
       if yield(self[x])
         arr.push(self[x])
@@ -45,19 +45,19 @@ module MyEnumerables
 
   def my_none?
     self.length.times do |x|
-      return false if yield(self[x]) 
+      return false if yield(self[x])
     end
     true
   end
 
-  def my_count (arg=nil)
+  def my_count(arg = nil)
     arr = []
     if block_given?
       arr = self.my_select { |x| yield(x) }
-    elsif arg != nil
+    elsif !arg.nil?
       arr = self.my_select { |x| x == arg }
-    else 
-      return self.size 
+    else
+      return self.size
     end
     arr.length
   end
